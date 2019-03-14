@@ -1,0 +1,61 @@
+{
+    "Dir": {
+        "log_root": "results/myo"
+    },
+    "Glow" : {
+        "image_shape": [64, 16, 1],
+        "hidden_channels": 256,
+        "K": 32,
+        "L": 3,
+        "actnorm_scale": 1.0,
+        "flow_permutation": "invconv",
+        "flow_coupling": "affine",
+        "LU_decomposed": false,
+        "learn_top": true,
+        "y_condition": true,
+        "y_classes": 41
+    },
+    "Criterion" : {
+        "y_condition": "single-class"
+    },
+    "Data" : {
+        "center_crop": 0,
+        "resize": 0
+    },
+    "Optim": {
+        "name": "adam",
+        "args": {
+            "lr": 1e-3,
+            "betas": [0.9, 0.9999],
+            "eps": 1e-8
+        },
+        "Schedule": {
+            "name": "noam_learning_rate_decay",
+            "args": {
+                "warmup_steps": 4000,
+                "minimum": 1e-4
+            }
+        }
+    },
+    "Device": {
+        "glow": ["cuda:0", "cuda:1", "cuda:2", "cuda:3"],
+        "data": "cuda:0"
+    },
+    "Train": {
+        "batch_size": 24,
+        "num_batches": 16560, 
+        "max_grad_clip": 5,
+        "max_grad_norm": 100,
+        "max_checkpoints": 5000,
+        "checkpoints_gap": 100,
+        "num_plot_samples": 2,
+        "scalar_log_gap": 50,
+        "plot_gap": 50,
+        "inference_gap": 50,
+        "warm_start": "./results/myo/trained.pkg",
+        "weight_y": 0.5
+    },
+    "Infer": {
+        "pre_trained": "./results/myo/trained.pkg"
+    }
+}
